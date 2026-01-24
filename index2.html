@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Avatars</title>
+  <style>
+body {
+  box-sizing: border-box;
+  background-color: white;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* Background Website */
+.background-website {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 5;
+}
+
+.background-website iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 8;
+  pointer-events: none;
+  transition: background-color 0.3s ease;
+}
+
+.overlay.light {
+  background-color: rgba(0, 0, 0, 0);
+}
+
+/* Avatar Panel */
+.avatar-panel {
+  position: fixed;
+  left: 0;
+  width: 100%;
+  height: 80%;
+  background-color: white;
+  z-index: 100;
+  border-radius: 30px 30px 0 0;
+  bottom: 0;
+  transform: translateY(0);
+  transition: transform 0.3s ease;
+  overflow: hidden;
+  box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.1);
+}
+
+.avatar-panel.collapsed {
+  transform: translateY(calc(100% - 100px));
+}
+
+.panel-handle {
+  width: 100%;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  background-color: white;
+  border-radius: 30px 30px 0 0;
+}
+
+.panel-handle:active {
+  cursor: grabbing;
+}
+
+.handle-bar {
+  width: 40px;
+  height: 5px;
+  background-color: #D1D1D6;
+  border-radius: 3px;
+}
+
+.panel-content {
+  height: calc(100% - 60px);
+  overflow-y: auto;
+  padding: 0;
+}
+
+.container {
+  max-width: 100%;
+  width: 100%;
+  padding: 20px 12px;
+  margin: 0 auto;
+}
+h1 {
+  font-size: 24px;
+  font-weight: normal;
+  margin-bottom: 40px;
+  padding: 0 3px;
+}
+h1 a {
+  color: #5C46FF;
+  text-decoration: none;
+  margin-left: 3px;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.card {
+  background-color: #F8F8FA;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 15px;
+  aspect-ratio: 9/16;
+  cursor: pointer;
+  overflow: hidden;
+}
+@media (max-width: 480px) {
+  .grid {
+    gap: 6px;
+  }
+  .container {
+    padding: 20px 8px;
+  }
+  .add-icon {
+    width: 25px;
+    height: 25px;
+  }
+  .add-text {
+    font-size: 8px;
+    margin-top: 4px;
+  }
+  .price {
+    font-size: 8px;
+    margin-top: 2px;
+  }
+  .price img {
+    width: 10px;
+    height: 10px;
+  }
+  .old-price {
+    font-size: 8px;
+  }
+}
+.add-icon {
+  width: 45px;
+  height: 45px;
+}
+.add-text {
+  margin-top: 8px;
+  font-size: 12px;
+  text-align: center;
+}
+.price {
+  display: flex;
+  align-items: center;
+  margin-top: 3px;
+  font-size: 12px;
+}
+.price img {
+  width: 14px;
+  height: 14px;
+  margin-right: 4px;
+}
+.old-price {
+  text-decoration: line-through;
+  color: #A5A5A9;
+  margin-left: 4px;
+  font-size: 12px;
+}
+.avatar-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 20px;
+}
+.card {
+  position: relative;
+}
+</style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="/_sdk/element_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body><!-- Background Website -->
+  <div class="background-website"><iframe src="https://web.zepeto.me/share/user/profile/zepeto?language=en"></iframe>
+  </div><!-- Overlay -->
+  <div class="overlay" id="overlay"></div><!-- Avatar Panel -->
+  <div class="avatar-panel" id="avatarPanel">
+   <div class="panel-handle" id="panelHandle">
+    <div class="handle-bar"></div>
+   </div>
+   <div class="panel-content">
+    <div class="container">
+     <h1>My avatars <a href="#">99</a></h1>
+     <div class="grid">
+      <div class="card" onclick="window.open('https://www.google.com', '_blank', 'noopener,noreferrer')">
+       <svg class="add-icon" viewbox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="30" cy="30" r="28" fill="#292931" stroke="#292931" stroke-width="2" /> <rect x="28" y="18" width="4" height="24" rx="2" fill="#F8F8FA" /> <rect x="18" y="28" width="24" height="4" rx="2" fill="#F8F8FA" />
+       </svg>
+       <div class="add-text">
+        Add an 5 avatar
+       </div>
+       <div class="price"><img src="zem.png" alt="diamond"> <span>Free</span> <span class="old-price">70</span>
+       </div>
+      </div>
+      <div class="card">
+       <img src="avatar.png" alt="avatar" class="avatar-img">
+      </div>
+      <div class="card">
+       <img src="avatar.png" alt="avatar" class="avatar-img">
+      </div>
+      <div class="card">
+       <img src="avatar.png" alt="avatar" class="avatar-img">
+      </div>
+      <div class="card">
+       <img src="avatar.png" alt="avatar" class="avatar-img">
+      </div>
+      <div class="card">
+       <img src="avatar.png" alt="avatar" class="avatar-img">
+      </div>
+      <div class="card">
+       <img src="avatar.png" alt="avatar" class="avatar-img">
+      </div>
+      <div class="card">
+       <img src="avatar.png" alt="avatar" class="avatar-img">
+      </div>
+      <div class="card">
+       <img src="avatar.png" alt="avatar" class="avatar-img">
+      </div>
+      <div class="card">
+       <img src="avatar.png" alt="avatar" class="avatar-img">
+      </div>
+      <div class="card">
+       <img src="avatar.png" alt="avatar" class="avatar-img">
+      </div>
+      <div class="card">
+       <img src="avatar.png" alt="avatar" class="avatar-img">
+      </div>
+      <div class="card">
+       <img src="avatar.png" alt="avatar" class="avatar-img">
+      </div>
+      <div class="card">
+       <img src="avatar.png" alt="avatar" class="avatar-img">
+      </div>
+      <div class="card">
+       <img src="avatar.png" alt="avatar" class="avatar-img">
+      </div>
+      <div class="card">
+       <img src="avatar.png" alt="avatar" class="avatar-img">
+      </div>
+      <div class="card">
+       <img src="avatar.png" alt="avatar" class="avatar-img">
+      </div>
+      <div class="card">
+       <img src="avatar.png" alt="avatar" class="avatar-img">
+      </div>
+      <div class="card">
+       <img src="avatar.png" alt="avatar" class="avatar-img">
+      </div>
+      <div class="card">
+       <img src="avatar.png" alt="avatar" class="avatar-img">
+      </div>
+      <div class="card">
+       <img src="avatar.png" alt="avatar" class="avatar-img">
+      </div>
+      <div class="card">
+       <img src="avatar.png" alt="avatar" class="avatar-img">
+      </div>
+      <div class="card">
+       <img src="avatar.png" alt="avatar" class="avatar-img">
+      </div>
+      <div class="card">
+       <img src="avatar.png" alt="avatar" class="avatar-img">
+      </div>
+      <div class="card">
+       <img src="avatar.png" alt="avatar" class="avatar-img">
+      </div>
+      <div class="card">
+       <img src="avatar.png" alt="avatar" class="avatar-img">
+      </div>
+      <div class="card">
+       <img src="avatar.png" alt="avatar" class="avatar-img">
+      </div>
+      <div class="card">
+       <img src="avatar.png" alt="avatar" class="avatar-img">
+      </div>
+      <div class="card">
+       <img src="avatar.png" alt="avatar" class="avatar-img">
+      </div>
+      <div class="card">
+       <img src="avatar.png" alt="avatar" class="avatar-img">
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script>
+const avatarPanel = document.getElementById('avatarPanel');
+const panelHandle = document.getElementById('panelHandle');
+const overlay = document.getElementById('overlay');
+
+let isDragging = false;
+let startY = 0;
+let currentTranslateY = 0;
+
+// Panel drag functionality
+panelHandle.addEventListener('mousedown', startDrag);
+panelHandle.addEventListener('touchstart', startDrag);
+
+document.addEventListener('mousemove', drag);
+document.addEventListener('touchmove', drag);
+
+document.addEventListener('mouseup', endDrag);
+document.addEventListener('touchend', endDrag);
+
+function startDrag(e) {
+  isDragging = true;
+  startY = e.type === 'mousedown' ? e.clientY : e.touches[0].clientY;
+  const transform = window.getComputedStyle(avatarPanel).transform;
+  if (transform !== 'none') {
+    const matrix = new DOMMatrix(transform);
+    currentTranslateY = matrix.m42;
+  }
+}
+
+function drag(e) {
+  if (!isDragging) return;
+  
+  const currentY = e.type === 'mousemove' ? e.clientY : e.touches[0].clientY;
+  const deltaY = currentY - startY;
+  const newTranslateY = currentTranslateY + deltaY;
+  
+  const maxTranslateY = avatarPanel.offsetHeight - 100;
+  const clampedTranslateY = Math.max(0, Math.min(newTranslateY, maxTranslateY));
+  
+  avatarPanel.style.transition = 'none';
+  avatarPanel.style.transform = `translateY(${clampedTranslateY}px)`;
+  
+  // Update overlay darkness based on panel position
+  const darkness = 1 - (clampedTranslateY / maxTranslateY);
+  overlay.style.backgroundColor = `rgba(0, 0, 0, ${darkness * 0.5})`;
+}
+
+function endDrag() {
+  if (!isDragging) return;
+  isDragging = false;
+  
+  avatarPanel.style.transition = 'transform 0.3s ease';
+  overlay.style.transition = 'background-color 0.3s ease';
+  
+  const transform = window.getComputedStyle(avatarPanel).transform;
+  const matrix = new DOMMatrix(transform);
+  const translateY = matrix.m42;
+  
+  const threshold = avatarPanel.offsetHeight * 0.3;
+  
+  if (translateY > threshold) {
+    // Collapse panel (tarik ke bawah)
+    avatarPanel.style.transform = `translateY(calc(100% - 100px))`;
+    avatarPanel.classList.add('collapsed');
+    overlay.classList.add('light');
+    overlay.style.backgroundColor = 'rgba(0, 0, 0, 0)';
+  } else {
+    // Expand panel (tarik ke atas)
+    avatarPanel.style.transform = 'translateY(0)';
+    avatarPanel.classList.remove('collapsed');
+    overlay.classList.remove('light');
+    overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+  }
+}
+</script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c2b95ec85d7c4b3',t:'MTc2OTIxNjM0MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
